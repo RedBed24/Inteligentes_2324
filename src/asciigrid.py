@@ -34,3 +34,9 @@ class AsciiGrid:
     def __repr__(self) -> str:
         return self.__str__()
 
+    def get_map(self) -> list:
+        return self.map
+    
+    def get_attributes(self) -> list:
+        attributes=[]
+        return attributes
