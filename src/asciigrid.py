@@ -4,6 +4,7 @@ class AsciiGrid:
     def __init__(self, filename : str) -> None:
         """Crea un nuevo objeto con el nombre del fichero, pero no lo lee"""
         self.filename = filename
+        self.read()
 
 
     def read(self) -> "AsciiGrid":
