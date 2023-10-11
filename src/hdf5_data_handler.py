@@ -32,3 +32,35 @@ def get_dataset(nombre_archivo,nombre_grupo):
     hdf5_file_reader=h5py.File(nombre_archivo,'r')
     dataset=hdf5_file_reader[f'{nombre_grupo}/Dataset']
     return dataset
+
+
+
+
+
+
+            def crear hfd5(f, transform):
+                clonar(f a f_n = File(nombre_nuevo))
+                editar(f_n, factor, transform)
+
+            def editar(f_n, factor, transform):
+                 for dataset in f_n: # dataset es el nombre del dataset
+                    leer data_antiguo #data_antiguo=leer(dataset.data)
+                    leer xinf, yinf, xsup, ysup, cellsize, nodata_value
+
+                    # editar atributos de cada dataset y escribirlos en el hdf5
+                    dataset.cellsize = cellsize * factor
+                        
+                        # editar data del cada daataset y escribitlo en el hdf5 (borrar, crear nuevo data y escribir)
+                    borrar(f_n, dataset)
+                    data_nuevo=np.numpy()
+                    for i in range (0, len(data_antiguo), factor):
+                        data_nuevo.append(np.numpy())
+                        for j in range (0, len(data_antiguo[0]), factor):
+                            value = transform(data_antiguio[i:i+factor-1][j:j+factor-1])
+                            data_nuevo[-1].append(value)
+                    escribir(f_n, dataset, data_nuevo)ç
+
+            def borrar()
+        def escribir()
+        def clonar()
+        def leer()
