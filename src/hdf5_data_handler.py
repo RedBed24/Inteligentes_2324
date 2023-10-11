@@ -1,34 +1,75 @@
 import h5py
-from asciigrid import AsciiGrid
+import math
 
-def create_HDF5(nombre_archivo, file_list):
+def get_datasets_hdf5_file(hdf5_file_name):
+    datasets_names=[]
+    with h5py.File(hdf5_file_name,"r") as hdf5_file:
+        _get_group_structure(hdf5_file,datasets_names)
+    return datasets_names
 
-    with h5py.File(nombre_archivo,"w") as hdf5_file_writer:
-        group_names=_get_group_names(file_list)
+def _get_group_structure(group,datasets_names):
+    # Recorre los subgrupos en el grupo actual de forma recursiva
+    for item_name in group.keys():
+        item = group[item_name] 
+        if isinstance(item, h5py.Group): # Si el item es un grupo, se buscan datasets dentro de el recursivamente
+            _get_group_structure(item,datasets_names)
+        elif isinstance(item,h5py.Dataset): # Si el item es un dataset, se almacena su "ruta"
+            datasets_names.append(f"{group.name}{'' if group.name == '/' else '/'}{item_name}")
 
-        for group,file in zip(group_names,file_list):
-            # Obtener el mapa de cada fichero
-            asciigrid=AsciiGrid(file)
-            file_map=asciigrid.get_map()
-            _create_group(hdf5_file_writer,group,file_map)
+def get_dataset_attrs(hdf5_file_name, dataset_path):
+    dataset_attrs = {}  
+    # Devuelve un diccionario con los atributos de un dataset en particular
+    with h5py.File(hdf5_file_name, "r") as hdf5_file:
+        dataset_attrs_names = hdf5_file[dataset_path].attrs.keys()
+        for attr_name in dataset_attrs_names:
+            dataset_attrs[attr_name] = hdf5_file[dataset_path].attrs[attr_name]
+    return dataset_attrs
 
-def _get_group_names(file_list)-> list:
-    group_names=[]
-    # TODO: Obtener el nombre de los cada grupo a través de los archivos .asc
-    return group_names
+def get_dataset_data(hdf5_file_name,dataset_path):
+     
+     with h5py.File(hdf5_file_name, "r") as hdf5_file:
+        dataset = hdf5_file[dataset_path]
+        return dataset[()]
 
-def _create_group(hdf5_file,group_name,file):
-    g=hdf5_file.create_group(group_name)
-    g.create_dataset("Dataset",data=file)
-    # TODO: Añadir los atributos de cada dataset
+def check_umt_coordinate_in_dataset(hdf5_file_name,dataset_path,y,x):
+    dataset_attrs=get_dataset_attrs(hdf5_file_name,dataset_path)
+
+    if dataset_attrs['yinf']<y and y<dataset_attrs['ysup'] and dataset_attrs['xinf']<x and dataset_attrs['xsup']:
+        dataset_data=get_dataset_data(hdf5_file_name,dataset_path)
+        xsol=math.floor((x-dataset_attrs['xinf'])/dataset_attrs['cellsize'])
+        ysol=math.floor((y-dataset_attrs['yinf'])/dataset_attrs['cellsize'])
+        return dataset_data[ysol,xsol]
+    
+    return dataset_attrs['nodata_value']
+
+def order_datasets(hdf5_file_name,dataset_path):
+    # TODO: Crear método que ordene los datasets
+    pass
 
 
-def get_dataset_properties(ruta_dataset):
-    properties=[]
-    # TODO: dado la ruta del dataset, leer sus atributos
-    return properties
+'''def clone_hdf5(src_file_name,dest_file_name):
+    src_file=h5py.File(src_file_name,"r")
+    dest_file=h5py.File(dest_file_name,"w")
+    _clone_group(src_file,dest_file)
+    src_file.close()
+    dest_file.close()
 
-def get_dataset(nombre_archivo,nombre_grupo):
-    hdf5_file_reader=h5py.File(nombre_archivo,'r')
-    dataset=hdf5_file_reader[f'{nombre_grupo}/Dataset']
-    return dataset
+ 
+def _clone_group(src_group,dest_group):
+    for name, item in src_group.items():
+        if isinstance(item, h5py.Group):
+            new_group = dest_group.create_group(name)
+            _clone_group(item, new_group)
+        elif isinstance(item, h5py.Dataset):
+            dest_group.create_dataset(name, data=item[()])
+'''
+
+def modify_dataset_attr(hdf5_file_name,dataset_path,attr_name,new_value):
+    with h5py.File(hdf5_file_name, "r+") as hdf5_file:
+        hdf5_file[dataset_path].attrs[attr_name]=new_value;
+
+'''def modify_dataset_data(hdf5_file_name,dataset_path,new_data):
+    with h5py.File(hdf5_file_name,"r+") as hdf5_file:
+        dataset=hdf5_file[dataset_path]
+        dataset[...]=new_data'''
+
