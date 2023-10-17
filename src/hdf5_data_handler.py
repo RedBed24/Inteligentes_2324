@@ -5,7 +5,28 @@ def get_datasets_hdf5_file(hdf5_file_name):
     datasets_names=[]
     with h5py.File(hdf5_file_name,"r") as hdf5_file:
         _get_group_structure(hdf5_file,datasets_names)
+        _order_datasets(hdf5_file,datasets_names)
     return datasets_names
+
+def _order_datasets(hdf5_file, datasets_names):
+    ordered_datasets = [datasets_names[0]]
+    for i in range(1, len(datasets_names)):
+        dataset_attrs=get_dataset_attrs(hdf5_file, datasets_names[i])
+        for j in range(0, len(ordered_datasets)):
+            ordered_dataset_attrs=get_dataset_attrs(hdf5_file, ordered_datasets[j])
+
+            end=False
+            if (dataset_attrs['ysup'] > ordered_dataset_attrs['ysup'] and not end):
+                ordered_datasets.insert(j,datasets_names[i])
+                end=True   
+            elif (dataset_attrs['ysup'] == ordered_dataset_attrs['ysup'] and not end):
+                if (dataset_attrs['xinf'] < ordered_dataset_attrs['xinf']):
+                   ordered_datasets.insert(j,datasets_names[i]) 
+                   end=True
+            else:
+                ordered_datasets.append(datasets_names[i])
+
+    datasets_names[:]=ordered_datasets       
 
 def _get_group_structure(group,datasets_names):
     # Recorre los subgrupos en el grupo actual de forma recursiva
@@ -42,10 +63,6 @@ def check_umt_coordinate_in_dataset(hdf5_file_name,dataset_path,y,x):
     
     return dataset_attrs['nodata_value']
 
-def order_datasets(hdf5_file_name,dataset_path):
-    # TODO: Crear método que ordene los datasets
-    pass
-
 
 '''def clone_hdf5(src_file_name,dest_file_name):
     src_file=h5py.File(src_file_name,"r")
@@ -66,7 +83,7 @@ def _clone_group(src_group,dest_group):
 
 def modify_dataset_attr(hdf5_file_name,dataset_path,attr_name,new_value):
     with h5py.File(hdf5_file_name, "r+") as hdf5_file:
-        hdf5_file[dataset_path].attrs[attr_name]=new_value;
+        hdf5_file[dataset_path].attrs[attr_name]=new_value
 
 '''def modify_dataset_data(hdf5_file_name,dataset_path,new_data):
     with h5py.File(hdf5_file_name,"r+") as hdf5_file:
