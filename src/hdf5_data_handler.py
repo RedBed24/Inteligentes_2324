@@ -1,92 +1,36 @@
 import h5py
-import math
 
-def get_datasets_hdf5_file(hdf5_file_name):
-    datasets_names=[]
-    with h5py.File(hdf5_file_name,"r") as hdf5_file:
-        _get_group_structure(hdf5_file,datasets_names)
-        _order_datasets(hdf5_file,datasets_names)
-    return datasets_names
+from submapa import Submapa
+from point import Point
 
-def _order_datasets(hdf5_file, datasets_names):
-    ordered_datasets = [datasets_names[0]]
-    for i in range(1, len(datasets_names)):
-        dataset_attrs=get_dataset_attrs(hdf5_file, datasets_names[i])
-        for j in range(0, len(ordered_datasets)):
-            ordered_dataset_attrs=get_dataset_attrs(hdf5_file, ordered_datasets[j])
+def leer_hdf5(filename : str) -> tuple:
+    maps = []
+    nodata_Value = 0
+    sizeCell = 0
 
-            end=False
-            if (dataset_attrs['ysup'] > ordered_dataset_attrs['ysup'] and not end):
-                ordered_datasets.insert(j,datasets_names[i])
-                end=True   
-            elif (dataset_attrs['ysup'] == ordered_dataset_attrs['ysup'] and not end):
-                if (dataset_attrs['xinf'] < ordered_dataset_attrs['xinf']):
-                   ordered_datasets.insert(j,datasets_names[i]) 
-                   end=True
-            else:
-                ordered_datasets.append(datasets_names[i])
+    with h5py.File(filename, "r") as f:
+        for key in f.keys():
+            dataset = f[key]
 
-    datasets_names[:]=ordered_datasets       
+            inf = Point(dataset.attrs["xinf"], dataset.attrs["yinf"])
+            sup = Point(dataset.attrs["xsup"], dataset.attrs["ysup"])
+            sizeCell = dataset.attrs["cellsize"]
+            nodata_Value = dataset.attrs["nodata_value"]
 
-def _get_group_structure(group,datasets_names):
-    # Recorre los subgrupos en el grupo actual de forma recursiva
-    for item_name in group.keys():
-        item = group[item_name] 
-        if isinstance(item, h5py.Group): # Si el item es un grupo, se buscan datasets dentro de el recursivamente
-            _get_group_structure(item,datasets_names)
-        elif isinstance(item,h5py.Dataset): # Si el item es un dataset, se almacena su "ruta"
-            datasets_names.append(f"{group.name}{'' if group.name == '/' else '/'}{item_name}")
+            # FIXME: change None with dataset[()]
+            # TODO: si se quiere no guardar datos en ram, se debe guardar una referencia al fichero hdf5
+            maps.append(Submapa(inf, sup, None, sizeCell, nodata_Value, key))
 
-def get_dataset_attrs(hdf5_file_name, dataset_path):
-    dataset_attrs = {}  
-    # Devuelve un diccionario con los atributos de un dataset en particular
-    with h5py.File(hdf5_file_name, "r") as hdf5_file:
-        dataset_attrs_names = hdf5_file[dataset_path].attrs.keys()
-        for attr_name in dataset_attrs_names:
-            dataset_attrs[attr_name] = hdf5_file[dataset_path].attrs[attr_name]
-    return dataset_attrs
+    return f, nodata_Value, sizeCell, maps
 
-def get_dataset_data(hdf5_file_name,dataset_path):
-     
-     with h5py.File(hdf5_file_name, "r") as hdf5_file:
-        dataset = hdf5_file[dataset_path]
-        return dataset[()]
-
-def check_umt_coordinate_in_dataset(hdf5_file_name,dataset_path,y,x):
-    dataset_attrs=get_dataset_attrs(hdf5_file_name,dataset_path)
-
-    if dataset_attrs['yinf']<y and y<dataset_attrs['ysup'] and dataset_attrs['xinf']<x and dataset_attrs['xsup']:
-        dataset_data=get_dataset_data(hdf5_file_name,dataset_path)
-        xsol=math.floor((x-dataset_attrs['xinf'])/dataset_attrs['cellsize'])
-        ysol=math.floor((y-dataset_attrs['yinf'])/dataset_attrs['cellsize'])
-        return dataset_data[ysol,xsol]
-    
-    return dataset_attrs['nodata_value']
-
-
-'''def clone_hdf5(src_file_name,dest_file_name):
-    src_file=h5py.File(src_file_name,"r")
-    dest_file=h5py.File(dest_file_name,"w")
-    _clone_group(src_file,dest_file)
-    src_file.close()
-    dest_file.close()
-
- 
-def _clone_group(src_group,dest_group):
-    for name, item in src_group.items():
-        if isinstance(item, h5py.Group):
-            new_group = dest_group.create_group(name)
-            _clone_group(item, new_group)
-        elif isinstance(item, h5py.Dataset):
-            dest_group.create_dataset(name, data=item[()])
-'''
-
-def modify_dataset_attr(hdf5_file_name,dataset_path,attr_name,new_value):
-    with h5py.File(hdf5_file_name, "r+") as hdf5_file:
-        hdf5_file[dataset_path].attrs[attr_name]=new_value
-
-'''def modify_dataset_data(hdf5_file_name,dataset_path,new_data):
-    with h5py.File(hdf5_file_name,"r+") as hdf5_file:
-        dataset=hdf5_file[dataset_path]
-        dataset[...]=new_data'''
-
+def create_hdf5(filename : str, nodata_Value : float, sizeCell : float, submaps : list) -> None:
+    with h5py.File(filename, "w") as f:
+        for submap in submaps:
+            # TODO: si no se guarda data, habría que leerla del fichero hdf5
+            dataset = f.create_dataset(submap.name, data = submap.data)
+            dataset.attrs["xinf"] = submap.inf.x
+            dataset.attrs["yinf"] = submap.inf.y
+            dataset.attrs["xsup"] = submap.sup.x
+            dataset.attrs["ysup"] = submap.sup.y
+            dataset.attrs["cellsize"] = sizeCell
+            dataset.attrs["nodata_value"] = nodata_Value
