@@ -40,9 +40,10 @@ class Mapa:
 
     def umt_YX(self, p : "Point") -> float:
         """Dadas las coordenadas Y-UMT y X-UMT debe devolver el valor correspondiente a la celda del grid que corresponda a la posición de dichas coordenadas. Si no existe valor en dichas coordenadas devolverá el valor Mapa.nodata_Value."""
-        for submap in self.submaps:
-            if p in submap:
-                return submap.umt_YX(p)
+        if p in self:
+            for submap in self.submaps:
+                if p in submap:
+                    return submap.umt_YX(p)
         return self.nodata_Value
 
     def resize(self, factor : int, transform : "function", nombre_nuevo : str) -> "Mapa":
@@ -59,3 +60,6 @@ class Mapa:
     
     def __repr__(self) -> str:
         return self.__str__()
+
+    def __contain__(self, p : "Point") -> bool:
+        return Point(self.upLeft.x, self.downRight.y) < p < Point(self.downRight.x, self.upLeft.y)
