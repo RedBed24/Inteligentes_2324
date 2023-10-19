@@ -61,5 +61,5 @@ class Mapa:
     def __repr__(self) -> str:
         return self.__str__()
 
-    def __contain__(self, p : "Point") -> bool:
+    def __contains__(self, p : "Point") -> bool:
         return Point(self.upLeft.x, self.downRight.y) < p < Point(self.downRight.x, self.upLeft.y)
