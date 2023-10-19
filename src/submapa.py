@@ -2,14 +2,13 @@ from point import Point
 import hdf5_data_handler as hdf5
 
 class Submapa:
-    def __init__(self, inf : "Point", sup : "Point", filename, sizeCell, nodata_Value, name) -> None:
+    def __init__(self, filename : str, path : str, inf : "Point", sup : "Point", sizeCell, nodata_Value : float) -> None:
         self.inf = inf
         self.sup = sup
         self.sizeCell = sizeCell
         self.nodata_Value = nodata_Value
-        self.name = name
         self.filename = filename
-
+        self.path = path
         self.__data = None
 
     def data(self) -> list:

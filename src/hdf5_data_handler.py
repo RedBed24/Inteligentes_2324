@@ -17,7 +17,7 @@ def leer_hdf5(filename : str) -> tuple:
             sizeCell = dataset.attrs["cellsize"]
             nodata_Value = dataset.attrs["nodata_value"]
 
-            maps.append(Submapa(inf, sup, filename, sizeCell, nodata_Value, key))
+            maps.append(Submapa(filename, key, inf, sup, sizeCell, nodata_Value))
 
     return f, nodata_Value, sizeCell, maps
 
