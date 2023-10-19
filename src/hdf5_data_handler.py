@@ -5,8 +5,6 @@ from point import Point
 
 def leer_hdf5(filename : str) -> tuple:
     maps = []
-    nodata_Value = 0
-    sizeCell = 0
 
     with h5py.File(filename, "r") as f:
         for key in f.keys():
@@ -19,7 +17,7 @@ def leer_hdf5(filename : str) -> tuple:
 
             maps.append(Submapa(filename, key, inf, sup, sizeCell, nodata_Value))
 
-    return f, nodata_Value, sizeCell, maps
+    return f, maps
 
 def create_hdf5(filename : str, new_submaps : list) -> None:
     with h5py.File(filename, "w") as f:

@@ -5,11 +5,15 @@ from point import Point
 class Mapa:
     def __init__(self, filename : str) -> None:
         self.filename = filename
-        self.f, self.nodata_Value, self.sizeCell, self.submaps = hdf5.leer_hdf5(self.filename)# Fichero hdf5.
+        self.f, self.submaps = hdf5.leer_hdf5(self.filename)
 
         self.submaps.sort(reverse = True)
 
+        self.nodata_Value = self.submaps[0].nodata_Value
+        self.sizeCell = self.submaps[0].sizeCell
+
         self.upLeft, self.downRight = self._calc_corners()
+
         self.dim = self._calc_dim()
 
     def _calc_corners(self) -> tuple:
