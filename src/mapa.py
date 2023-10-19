@@ -36,9 +36,9 @@ class Mapa:
 
     def umt_YX(self, y : float, x : float) -> float:
         """Dadas las coordenadas Y-UMT y X-UMT debe devolver el valor correspondiente a la celda del grid que corresponda a la posición de dichas coordenadas. Si no existe valor en dichas coordenadas devolverá el valor Mapa.nodata_Value."""
-        return self.umt_YX(Point(x, y))
+        return self.umt_Point(Point(x, y))
 
-    def umt_YX(self, p : "Point") -> float:
+    def umt_Point(self, p : "Point") -> float:
         """Dadas las coordenadas Y-UMT y X-UMT debe devolver el valor correspondiente a la celda del grid que corresponda a la posición de dichas coordenadas. Si no existe valor en dichas coordenadas devolverá el valor Mapa.nodata_Value."""
         if p in self:
             for submap in self.submaps:
