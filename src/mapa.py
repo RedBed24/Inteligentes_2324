@@ -7,7 +7,7 @@ class Mapa:
         self.filename = filename
         self.f, self.nodata_Value, self.sizeCell, self.submaps = hdf5.leer_hdf5(self.filename)# Fichero hdf5.
 
-        self.submaps.sort(reversed = True)
+        self.submaps.sort(reverse = True)
 
         self.upLeft, self.downRight = self._calc_corners()
         self.dim = self._calc_dim()
