@@ -17,9 +17,7 @@ def leer_hdf5(filename : str) -> tuple:
             sizeCell = dataset.attrs["cellsize"]
             nodata_Value = dataset.attrs["nodata_value"]
 
-            # FIXME: change None with dataset[()]
-            # TODO: si se quiere no guardar datos en ram, se debe guardar una referencia al fichero hdf5
-            maps.append(Submapa(inf, sup, None, sizeCell, nodata_Value, key))
+            maps.append(Submapa(inf, sup, filename, sizeCell, nodata_Value, key))
 
     return f, nodata_Value, sizeCell, maps
 
@@ -34,3 +32,9 @@ def create_hdf5(filename : str, nodata_Value : float, sizeCell : float, submaps 
             dataset.attrs["ysup"] = submap.sup.y
             dataset.attrs["cellsize"] = sizeCell
             dataset.attrs["nodata_value"] = nodata_Value
+
+def leer_dataset_hdf5(filename : str, dataset_name : str) -> list:
+    data = None
+    with h5py.File(filename, "r") as f:
+        data = f[dataset_name][()]
+    return data
