@@ -12,11 +12,11 @@ class Mapa:
         self.nodata_Value = self.submaps[0].nodata_Value
         self.sizeCell = self.submaps[0].sizeCell
 
-        self.upLeft, self.downRight = self._calc_corners()
+        self.upLeft, self.downRight = self.__calc_corners()
 
         self.dim = [(self.downRight.x - self.upLeft.x) / self.sizeCell, (self.upLeft.y - self.downRight.y) / self.sizeCell]
 
-    def _calc_corners(self) -> tuple:
+    def __calc_corners(self) -> tuple:
         lowest = self.submaps[0].inf
         highest = self.submaps[0].sup
 
