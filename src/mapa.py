@@ -51,7 +51,7 @@ class Mapa:
         for submap in self.submaps:
             new_submaps.append(submap.resize(factor, transform))
         
-        hdf5.create_hdf5(nombre_nuevo, self.nodata_Value, self.sizeCell * factor, new_submaps)
+        hdf5.create_hdf5(nombre_nuevo, new_submaps)
         
         return Mapa(nombre_nuevo)
 

@@ -21,17 +21,16 @@ def leer_hdf5(filename : str) -> tuple:
 
     return f, nodata_Value, sizeCell, maps
 
-def create_hdf5(filename : str, nodata_Value : float, sizeCell : float, submaps : list) -> None:
+def create_hdf5(filename : str, new_submaps : list) -> None:
     with h5py.File(filename, "w") as f:
-        for submap in submaps:
-            # TODO: si no se guarda data, habría que leerla del fichero hdf5
-            dataset = f.create_dataset(submap.name, data = submap.data)
-            dataset.attrs["xinf"] = submap.inf.x
-            dataset.attrs["yinf"] = submap.inf.y
-            dataset.attrs["xsup"] = submap.sup.x
-            dataset.attrs["ysup"] = submap.sup.y
-            dataset.attrs["cellsize"] = sizeCell
-            dataset.attrs["nodata_value"] = nodata_Value
+        for new_submap in new_submaps:
+            dataset = f.create_dataset(new_submap.name, data = new_submap.data())
+            dataset.attrs["xinf"] = new_submap.inf.x
+            dataset.attrs["yinf"] = new_submap.inf.y
+            dataset.attrs["xsup"] = new_submap.sup.x
+            dataset.attrs["ysup"] = new_submap.sup.y
+            dataset.attrs["cellsize"] = new_submap.sizeCell
+            dataset.attrs["nodata_value"] = new_submap.nodata_Value
 
 def leer_dataset_hdf5(filename : str, dataset_name : str) -> list:
     data = None
