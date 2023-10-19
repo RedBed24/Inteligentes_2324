@@ -14,7 +14,7 @@ class Mapa:
 
         self.upLeft, self.downRight = self._calc_corners()
 
-        self.dim = self._calc_dim()
+        self.dim = [(self.downRight.x - self.upLeft.x) / self.sizeCell, (self.upLeft.y - self.downRight.y) / self.sizeCell]
 
     def _calc_corners(self) -> tuple:
         lowest = self.submaps[0].inf
@@ -35,9 +35,6 @@ class Mapa:
 
         return Point(lowest.x, highest.y), Point(highest.x, lowest.y)
     
-    def _calc_dim(self) -> tuple:
-        return ((self.downRight.x - self.upLeft.x / self.sizeCell), (self.upLeft.y - self.downRight.y) / self.sizeCell)
-
     def umt_YX(self, y : float, x : float) -> float:
         """Dadas las coordenadas Y-UMT y X-UMT debe devolver el valor correspondiente a la celda del grid que corresponda a la posición de dichas coordenadas. Si no existe valor en dichas coordenadas devolverá el valor Mapa.nodata_Value."""
         return self.umt_Point(Point(x, y))
