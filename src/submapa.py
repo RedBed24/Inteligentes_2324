@@ -29,13 +29,17 @@ class Submapa:
         return value
 
     def resize(self, factor : int, transform : "function") -> "Submapa":
+        # FIXME: new_data as a numpy array
         new_data = []
 
         loaded_data = self.data()
         for i in range(0, len(loaded_data), factor):
             new_data.append([])
             for j in range(0, len(loaded_data[i]), factor):
-                new_data[-1].append(transform(loaded_data[i:i+factor][j:j+factor]))
+                end_col = min(i + factor - 1, len(loaded_data))
+                end_row = min(j + factor - 1, len(loaded_data[i]))
+                values = loaded_data[i:end_col][j:end_row]
+                new_data[-1].append(transform([valid_value for valid_value in values if valid_value != self.nodata_Value]))
 
         return Submapa(self.inf, self.sup, new_data, self.sizeCell * factor, self.nodata_Value, self.name)
 
