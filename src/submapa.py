@@ -23,8 +23,9 @@ class Submapa:
     def umt_YX(self, p : "Point") -> float:
         value = self.nodata_Value
         if p in self:
-            # TODO: si no se guarda data, habría que leerla del fichero hdf5
-            value = self.data()[int((p.y - self.yinf.y)/self.sizeCell)][int((p.x - self.inf.x)/self.sizeCell)]
+            col = int((self.sup.y - p.y) / self.sizeCell)
+            row = int((p.x - self.inf.x) / self.sizeCell)
+            value = self.data()[col][row]
         return value
 
     def resize(self, factor : int, transform : "function") -> "Submapa":
