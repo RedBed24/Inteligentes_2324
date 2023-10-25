@@ -49,7 +49,7 @@ class Mapa:
     def resize(self, factor : int, transform : "function", nombre_nuevo : str) -> "Mapa":
         new_submaps = []
         for submap in self.submaps:
-            new_submaps.append(submap.resize(factor, transform))
+            new_submaps.append(submap.resize(factor, transform, nombre_nuevo))
         
         hdf5.create_hdf5(nombre_nuevo, new_submaps)
         

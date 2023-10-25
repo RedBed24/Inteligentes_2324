@@ -29,7 +29,7 @@ class Submapa:
             value = self.data()[col][row]
         return value
 
-    def resize(self, factor : int, transform : "function") -> "Submapa":
+    def resize(self, factor : int, transform : "function", nombre_nuevo : str) -> "Submapa":
         # FIXME: new_data as a numpy array
         new_data = []
 
@@ -49,7 +49,7 @@ class Submapa:
         return Submapa(nombre_nuevo, self.path, self.inf, self.sup, self.sizeCell * factor, self.nodata_Value, data = np.array(new_data))
 
     def __str__(self) -> str:
-        return f"({self.inf = }, {self.sup = }, {self.name = })"
+        return f"({self.inf = }, {self.sup = }, {self.path = })"
 
     def __repr__(self) -> str:
         return self.__str__()
