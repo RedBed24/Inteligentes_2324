@@ -38,8 +38,12 @@ class Submapa:
             for j in range(0, len(loaded_data[i]), factor):
                 end_col = min(i + factor - 1, len(loaded_data))
                 end_row = min(j + factor - 1, len(loaded_data[i]))
-                values = loaded_data[i:end_col][j:end_row]
-                new_data[-1].append(transform([valid_value for valid_value in values if valid_value != self.nodata_Value]))
+                values = []
+                for col in range(i, end_col):
+                    for row in range(j, end_row):
+                        if loaded_data[col][row] != self.nodata_Value:
+                            values.append(loaded_data[col][row])
+                new_data[-1].append(transform(values) if len(values) else self.nodata_Value)
 
         return Submapa(self.inf, self.sup, new_data, self.sizeCell * factor, self.nodata_Value, self.name)
 
