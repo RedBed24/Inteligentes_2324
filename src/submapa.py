@@ -2,14 +2,14 @@ from point import Point
 import hdf5_data_handler as hdf5
 
 class Submapa:
-    def __init__(self, filename : str, path : str, inf : "Point", sup : "Point", sizeCell, nodata_Value : float) -> None:
+    def __init__(self, filename : str, path : str, inf : "Point", sup : "Point", sizeCell, nodata_Value : float, data = None) -> None:
         self.inf = inf
         self.sup = sup
         self.sizeCell = sizeCell
         self.nodata_Value = nodata_Value
         self.filename = filename
         self.path = path
-        self.__data = None
+        self.__data = data
 
     def data(self) -> list:
         # TODO: sólo se carga una vez, cuando se necesita por primera vez
@@ -45,7 +45,7 @@ class Submapa:
                             values.append(loaded_data[col][row])
                 new_data[-1].append(transform(values) if len(values) else self.nodata_Value)
 
-        return Submapa(self.inf, self.sup, new_data, self.sizeCell * factor, self.nodata_Value, self.name)
+        return Submapa(nombre_nuevo, self.path, self.inf, self.sup, self.sizeCell * factor, self.nodata_Value, data = np.array(new_data))
 
     def __str__(self) -> str:
         return f"({self.inf = }, {self.sup = }, {self.name = })"
