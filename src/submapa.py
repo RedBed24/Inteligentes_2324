@@ -1,0 +1,71 @@
+from point import Point
+import numpy as np
+import hdf5_data_handler as hdf5
+
+class Submapa:
+    def __init__(self, filename : str, path : str, inf : "Point", sup : "Point", sizeCell, nodata_Value : float, data = None) -> None:
+        self.inf = inf
+        self.sup = sup
+        self.sizeCell = sizeCell
+        self.nodata_Value = nodata_Value
+        self.filename = filename
+        self.path = path
+        self.__data = data
+
+    def data(self) -> list:
+        # TODO: sólo se carga una vez, cuando se necesita por primera vez
+        if self.__data is None:
+            self.__data = hdf5.leer_dataset_hdf5(self.filename, self.path)
+        return self.__data
+
+    def __contains__(self, p : "Point") -> bool:
+        return self.inf < p < self.sup
+    
+    def umt_YX(self, p : "Point") -> float:
+        value = self.nodata_Value
+        if p in self:
+            col = int((self.sup.y - p.y) / self.sizeCell)
+            row = int((p.x - self.inf.x) / self.sizeCell)
+            value = self.data()[col][row]
+        return value
+
+    def resize(self, factor : int, transform : "function", nombre_nuevo : str) -> "Submapa":
+        # FIXME: new_data as a numpy array
+        new_data = []
+
+        loaded_data = self.data()
+        for i in range(0, len(loaded_data), factor):
+            new_data.append([])
+            for j in range(0, len(loaded_data[i]), factor):
+                end_col = min(i + factor - 1, len(loaded_data))
+                end_row = min(j + factor - 1, len(loaded_data[i]))
+                values = []
+                for col in range(i, end_col):
+                    for row in range(j, end_row):
+                        if loaded_data[col][row] != self.nodata_Value:
+                            values.append(loaded_data[col][row])
+                new_data[-1].append(transform(values) if len(values) else self.nodata_Value)
+
+        return Submapa(nombre_nuevo, self.path, self.inf, self.sup, self.sizeCell * factor, self.nodata_Value, data = np.array(new_data))
+
+    def __str__(self) -> str:
+        return f"({self.inf = }, {self.sup = }, {self.path = })"
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
+    def __gt__(self, other) -> bool:
+        # FIXME: check x too
+        return self.sup.y > other.sup.y
+
+    def __ge__(self, other) -> bool:
+        return self.sup.y >= other.sup.y
+
+    def __lt__(self, other) -> bool:
+        return self.sup.y < other.sup.y
+
+    def __le__(self, other) -> bool:
+        return self.sup.y <= other.sup.y
+
+    def __eq__(self, other) -> bool:
+        return self.sup.y == other.sup.y
