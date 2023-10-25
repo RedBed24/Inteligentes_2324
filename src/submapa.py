@@ -1,4 +1,5 @@
 from point import Point
+import numpy as np
 import hdf5_data_handler as hdf5
 
 class Submapa:
