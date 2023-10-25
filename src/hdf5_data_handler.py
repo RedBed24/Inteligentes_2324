@@ -22,7 +22,7 @@ def leer_hdf5(filename : str) -> tuple:
 def create_hdf5(filename : str, new_submaps : list) -> None:
     with h5py.File(filename, "w") as f:
         for new_submap in new_submaps:
-            dataset = f.create_dataset(new_submap.name, data = new_submap.data())
+            dataset = f.create_dataset(new_submap.path, data = new_submap.data())
             dataset.attrs["xinf"] = new_submap.inf.x
             dataset.attrs["yinf"] = new_submap.inf.y
             dataset.attrs["xsup"] = new_submap.sup.x
