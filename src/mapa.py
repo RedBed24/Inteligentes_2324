@@ -16,8 +16,8 @@ class Mapa:
         self.dim = [(self.downRight.x - self.upLeft.x) / self.sizeCell, (self.upLeft.y - self.downRight.y) / self.sizeCell]
 
     def __calc_corners(self) -> tuple:
-        lowest = self.submaps[0].inf
-        highest = self.submaps[0].sup
+        lowest = Point(self.submaps[0].inf.y, self.submaps[0].inf.x)
+        highest = Point(self.submaps[0].sup.y, self.submaps[0].sup.x)
 
         for submap in self.submaps[1:]:
             # nos quedamos con la coordenada x e y más bajas
