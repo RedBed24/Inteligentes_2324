@@ -62,4 +62,4 @@ class Mapa:
         return self.__str__()
 
     def __contains__(self, p : "Point") -> bool:
-        return Point(self.upLeft.x, self.downRight.y) < p < Point(self.downRight.x, self.upLeft.y)
+        return Point(self.upLeft.x, self.downRight.y) <= p < Point(self.downRight.x, self.upLeft.y)

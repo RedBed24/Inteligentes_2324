@@ -19,7 +19,7 @@ class Submapa:
         return self.__data
 
     def __contains__(self, p : "Point") -> bool:
-        return self.inf < p < self.sup
+        return self.inf <= p < self.sup
     
     def umt_YX(self, p : "Point") -> float:
         value = self.nodata_Value
