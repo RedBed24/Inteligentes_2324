@@ -26,24 +26,23 @@ class Submapa:
         if p in self:
             col = int((self.sup.y - p.y) / self.sizeCell)
             row = int((p.x - self.inf.x) / self.sizeCell)
-            value = self.data()[col][row]
+            value = round(self.data()[col][row],3)
         return value
 
     def resize(self, factor : int, transform : "function", nombre_nuevo : str) -> "Submapa":
-        # FIXME: new_data as a numpy array
         new_data = []
 
         loaded_data = self.data()
         for i in range(0, len(loaded_data), factor):
             new_data.append([])
             for j in range(0, len(loaded_data[i]), factor):
-                end_col = min(i + factor - 1, len(loaded_data))
-                end_row = min(j + factor - 1, len(loaded_data[i]))
+                end_row = min(i + factor , len(loaded_data))
+                end_col = min(j + factor , len(loaded_data[i]))
                 values = []
-                for col in range(i, end_col):
-                    for row in range(j, end_row):
-                        if loaded_data[col][row] != self.nodata_Value:
-                            values.append(loaded_data[col][row])
+                for row in range(i, end_row):
+                    for col in range(j, end_col):
+                        if loaded_data[row][col] != self.nodata_Value:
+                            values.append(loaded_data[row][col])
                 new_data[-1].append(transform(values) if len(values) else self.nodata_Value)
 
         return Submapa(nombre_nuevo, self.path, self.inf, self.sup, self.sizeCell * factor, self.nodata_Value, data = np.array(new_data))

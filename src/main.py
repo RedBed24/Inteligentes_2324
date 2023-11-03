@@ -5,7 +5,7 @@ def test(filename : str, mapa : "Mapa", roundval = 3, do_round = False) -> None:
     count = 0
     count_error = 0
 
-    error = 10 ** - roundval
+    error =  10 ** - roundval
 
     with open(filename, "r") as f:
         lines = f.readlines()
@@ -43,11 +43,12 @@ def main():
     map = Mapa(os.path.join(DATAFOLDER, "LaGomera.hdf5"))
 
     print(f"{'line':4} {'y':7} {'x':6} {'expeted':8} {'obtained':10} {'diff':5}")
-#    print(f"testing original")
-#    count, count_error, lenlines = test(os.path.join(DATAFOLDER, "test_map_original.txt"), map, roundval, do_round)
-#    print(f"Out of {lenlines}, {count}({count/lenlines * 100:.2f}%) fails, {count_error}({count_error/count * 100:.2f}% error/fail, {count_error/lenlines * 100:.2f}% error/total) with distance > {10 ** - roundval}" if count != 0 else "No errors")
+    print(f"testing original")
+    count, count_error, lenlines = test(os.path.join(DATAFOLDER, "test_map_original.txt"), map, roundval, do_round)
+    print(f"Out of {lenlines}, {count}({count/lenlines * 100:.2f}%) fails, {count_error}({count_error/count * 100:.2f}% error/fail, {count_error/lenlines * 100:.2f}% error/total) with distance > {10 ** - roundval}" if count != 0 else "No errors")
 
-    mean = lambda x : sum(x) / len(x)
+
+    mean = lambda x: round(sum(x) / len(x), 3) # redondea la media a 3 decimales
     # leer si se existe else crear
     resized = Mapa(os.path.join(DATAFOLDER, "300_mean.hdf5")) if os.path.isfile(os.path.join(DATAFOLDER, "300_mean.hdf5")) else map.resize(300, mean, os.path.join(DATAFOLDER, "300_mean.hdf5"))
     print(f"testing map_300_mean")
@@ -58,7 +59,8 @@ def main():
     print(f"testing map_400_max")
     count, count_error, lenlines = test(os.path.join(DATAFOLDER, "test_map_400_max.txt"), resized, roundval, do_round)
     print(f"Out of {lenlines}, {count}({count/lenlines * 100:.2f}%) fails, {count_error}({count_error/count * 100:.2f}% error/fail, {count_error/lenlines * 100:.2f}% error/total) with distance > {10 ** - roundval}" if count != 0 else "No errors")
-
+    
+    
 
 if __name__ == "__main__":
     main()
