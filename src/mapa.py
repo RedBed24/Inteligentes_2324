@@ -16,8 +16,8 @@ class Mapa:
         self.dim = [(self.downRight.x - self.upLeft.x) / self.sizeCell, (self.upLeft.y - self.downRight.y) / self.sizeCell]
 
     def __calc_corners(self) -> tuple:
-        lowest = Point(self.submaps[0].inf.y, self.submaps[0].inf.x)
-        highest = Point(self.submaps[0].sup.y, self.submaps[0].sup.x)
+        lowest = Point(self.submaps[0].inf.x, self.submaps[0].inf.y)
+        highest = Point(self.submaps[0].sup.x, self.submaps[0].sup.y)
 
         for submap in self.submaps[1:]:
             # nos quedamos con la coordenada x e y más bajas
@@ -62,4 +62,4 @@ class Mapa:
         return self.__str__()
 
     def __contains__(self, p : "Point") -> bool:
-        return Point(self.upLeft.x, self.downRight.y) < p < Point(self.downRight.x, self.upLeft.y)
+        return Point(self.upLeft.x, self.downRight.y) <= p < Point(self.downRight.x, self.upLeft.y)
