@@ -53,3 +53,6 @@ La implementación de esta es fácil:
 3. Problema
    - Guarda el mapa, el estado inicial y los datos para calcular la función objetivo.
 
+# Archivo de configuración
+
+Hemos decidido utilizar un archivo de configuración *.json* con el objetivo de separar los datos del código. De esta forma, se facilita la modificación de las constantes con las que se van a trabajar sin necesidad de modificar el código fuente.

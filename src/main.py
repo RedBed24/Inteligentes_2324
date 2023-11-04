@@ -1,5 +1,8 @@
 from mapa import Mapa
 import os.path
+import json
+
+with open('config.json', 'r') as file:     config = json.load(file)
 
 def test(filename : str, mapa : "Mapa", roundval = 3, do_round = False) -> None:
     count = 0
@@ -34,13 +37,13 @@ def test(filename : str, mapa : "Mapa", roundval = 3, do_round = False) -> None:
 
 
 def main():
-    DATAFOLDER = "data"
+    DATAFOLDER = config["datafolder"]
     # decimales que se redondean
     roundval = 0
     # redondear o no
     do_round = False
 
-    map = Mapa(os.path.join(DATAFOLDER, "LaGomera.hdf5"))
+    map = Mapa(os.path.join(DATAFOLDER, config["mapa_hdf5"]))
 
     print(f"{'line':4} {'y':7} {'x':6} {'expeted':8} {'obtained':10} {'diff':5}")
     print(f"testing original")

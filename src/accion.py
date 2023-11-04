@@ -1,5 +1,9 @@
 from estado import Estado
 from mapa import Mapa
+import os
+import json
+
+with open('config.json', 'r') as file:     config = json.load(file)
 
 class Accion:
     NORTH = "N"
@@ -7,9 +11,9 @@ class Accion:
     EAST = "E"
     WEST = "W"
     DIRECTIONS = [NORTH, EAST, SOUTH, WEST]
-
-    FACTOR = 5
-    ACCION_MAX_HEIGTH = 100
+    
+    FACTOR = config["factor_desplazamiento"]
+    ACCION_MAX_HEIGTH = config["accion_max_heigth"]
 
     def __init__(self, from_state : Estado, in_map : Mapa, direction) -> None:
         self.length = in_map.sizeCell * Accion.FACTOR
