@@ -1,13 +1,11 @@
-from estado import Estado
-from accion import Accion  
-from nodo import Nodo
+from espacio_estados import Accion,Estado
 from typing import Optional
 
 class Nodo:
 
     last_id=0
 
-    def __init__(self, estado:Estado, valor:float, profundidad:int, costo:float, heuristica:float, accion:Accion,parent: Optional['Nodo'] = None):
+    def __init__(self, estado:Estado, valor:float, profundidad:int, costo:float, heuristica:float, accion:Accion,parent:Optional["Nodo"]):
         self.id=Nodo.last_id
         Nodo.last_id+=1
         self.parent=parent
@@ -19,7 +17,8 @@ class Nodo:
         self.accion=accion
 
     def __str__(self):
-        return f"[{self.id}][{self.coste},{self.estado.id},{self.parent.id},{self.accion},{self.profundidad},{self.heuristica},{self.valor}]"
+        id_parent = self.parent.id if self.parent is not None else None
+        return f"[{self.id}][{self.coste},{self.estado.id},{id_parent},{self.accion},{self.profundidad},{self.heuristica},{self.valor}]"
     
     def __repr__(self):
         return self.__str__()   

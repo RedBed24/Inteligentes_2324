@@ -1,4 +1,4 @@
-from estado import Estado
+from espacio_estados import Estado
 from mapa import Mapa
 
 class Problema:
