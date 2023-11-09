@@ -1,4 +1,7 @@
 from mapa import Mapa
+from espacio_estados import Accion,Estado
+from nodo import Nodo
+from frontera import Frontera
 import os.path
 import json
 
@@ -35,6 +38,45 @@ def test(filename : str, mapa : "Mapa", roundval = 3, do_round = False) -> None:
 
     return count, count_error, len(lines)
 
+def test_espacio_estados_y_frontera(map:Mapa):
+    # NODOS Y FRONTERAS
+    estado1 = Estado(1, 1, map)
+    estado2 = Estado(1, 2, map)
+    estado3 = Estado(1, 3, map)
+
+    accion1= Accion(from_state=estado1, in_map=map,direction="N")
+    accion2= Accion(from_state=estado2,in_map= map, direction="N")
+    accion3= Accion(from_state=estado3,in_map= map, direction="N")
+
+
+    nodo1 = Nodo(estado1, 0, 0, 1, 1,accion1, None)
+    nodo2 = Nodo(estado2, 1, 1, 1, 1,accion2, nodo1)
+    nodo3 = Nodo(estado3, 1, 1, 1, 1,accion3, nodo1)
+    nodo4 = Nodo(estado2, 2, 2, 1, 1,accion2,nodo2)
+    nodo5 = Nodo(estado3, 2, 2, 1, 1,accion3,nodo2)
+    nodo6 = Nodo(estado3, 2, 2, 1, 1,accion3,nodo2)
+    nodo7 = Nodo(estado3, 2, 2, 1, 1,accion3,nodo3)
+
+    frontera=Frontera()
+    frontera.add(nodo1)
+    frontera.add(nodo2)
+    frontera.add(nodo3)
+    frontera.add(nodo4)
+    frontera.add(nodo5)
+    frontera.add(nodo6)
+    frontera.add(nodo7)
+
+    print("FRONTERA")
+    print(frontera.len())
+    print(frontera.getNode())
+    print(frontera.getNode())
+    print(frontera.getNode())
+    print(frontera.getNode())
+    print(frontera.getNode())
+    print(frontera.getNode())
+    print(frontera.getNode())
+    print(frontera.getNode())
+
 
 def main():
     DATAFOLDER = config["datafolder"]
@@ -44,7 +86,6 @@ def main():
     do_round = False
 
     map = Mapa(os.path.join(DATAFOLDER, config["mapa_hdf5"]))
-
     print(f"{'line':4} {'y':7} {'x':6} {'expeted':8} {'obtained':10} {'diff':5}")
     print(f"testing original")
     count, count_error, lenlines = test(os.path.join(DATAFOLDER, "test_map_original.txt"), map, roundval, do_round)
@@ -63,8 +104,8 @@ def main():
     count, count_error, lenlines = test(os.path.join(DATAFOLDER, "test_map_400_max.txt"), resized, roundval, do_round)
     print(f"Out of {lenlines}, {count}({count/lenlines * 100:.2f}%) fails, {count_error}({count_error/count * 100:.2f}% error/fail, {count_error/lenlines * 100:.2f}% error/total) with distance > {10 ** - roundval}" if count != 0 else "No errors")
     
-    
+    test_espacio_estados_y_frontera(map)
+
 
 if __name__ == "__main__":
     main()
-
