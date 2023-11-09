@@ -33,20 +33,18 @@ class Nodo:
         return 
     
     def __eq__(self, other) -> bool:
-        return self.id==other.id
-    
+        return (self.valor, self.id) == (other.valor, other.id)
+
     def __lt__(self, other) -> bool:
-        return self.id<other.id
-    
+        return (self.valor, self.id) < (other.valor, other.id)
+
     def __le__(self, other) -> bool:
-        return self.id <= other.id 
-
-
+        return (self.valor, self.id) <= (other.valor, other.id)
+    
     def __gt__(self, other) -> bool:
-        return self.id > other.id
+        return (self.valor, self.id) > (other.valor, other.id)
 
     def __ge__(self, other) -> bool:
-        return self.id >= other.id
-
+        return (self.valor, self.id) >= (other.valor, other.id)
 
 
