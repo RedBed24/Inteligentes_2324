@@ -5,16 +5,19 @@ class Nodo:
 
     last_id=0
 
-    def __init__(self, estado:Estado, valor:float, profundidad:int, costo:float, heuristica:float, accion:Accion,parent:Optional["Nodo"]):
+    def __init__(self, estado:Estado, valor:float, profundidad:int, costo_distancia:float, costo_max_desnivel:float, heuristica:float, accion:Accion,parent:Optional["Nodo"]):
         self.id=Nodo.last_id
         Nodo.last_id+=1
         self.parent=parent
         self.estado=estado
-        self.valor=valor
+        self.valor=valor    
         self.profundidad=profundidad
-        self.coste=costo
+        self.costo = {'distancia': costo_distancia, 'maxDesnivel': costo_max_desnivel}
         self.heuristica=heuristica
         self.accion=accion
+
+    def set_valor(self, estrategia:function):
+        self.valor=estrategia(self)
 
     def __str__(self):
         id_parent = self.parent.id if self.parent is not None else None
@@ -29,7 +32,7 @@ class Nodo:
         if self.parent is not None:
             camino+=self.parent.funcion_camino()
         
-        return 
+        return camino
     
     def __eq__(self, other) -> bool:
         return (self.valor, self.id) == (other.valor, other.id)
