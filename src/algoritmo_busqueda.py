@@ -1,48 +1,32 @@
 from nodo import Nodo
 from frontera import Frontera
-from espacio_estados import Estado 
-from espacio_estados import Accion
+from problema import Problema
 
-# Definición de funciones (Provisional, además no debería ir aquí xd)
-def anchura(nodo):
-    return nodo.profundidad
-
-def profundidad(nodo):
-    return 1 / (nodo.profundidad + 1)
-
-def costo_uniforme(nodo):
-    return nodo.costo['distancia']
-
-# Creación de un diccionario de funciones
-diccionario_funciones = {
-    'anchura': anchura,
-    'profundidad': profundidad,
-    'costo_uniforme': costo_uniforme
-}
-
-def algoritmo_busqueda(estado_inicial, estado_final, estrategia : function, cota : int):
+def algoritmo_busqueda(problema : Problema, estrategia : "function", profundidad_maxima : int) -> list:
+    id_nodo = 0
     frontera = Frontera()
     visitados = []
     solucion = False
-    nodo_inicial = Nodo(estado_inicial, 0, 0, 0, 0, 0, None, None)
-    frontera.append(nodo_inicial)
+    nodo_inicial = Nodo(id_nodo, None, problema.initial_state, 0, 0, 0, problema.heuristica(problema.initial_state), None)
+    nodo_inicial.valor = estrategia(nodo_inicial)
+    frontera.add(nodo_inicial)
 
-    while (len(frontera) > 0 and not solucion):
+    while len(frontera) and not solucion:
         nodo=frontera.getNode()
-        if nodo.estado == estado_final:
+        if problema.objetivo(nodo.estado):
             solucion = True
         else:
-            if (nodo.estado not in visitados and nodo.profundidad <= cota): 
+            if nodo.estado not in visitados and nodo.profundidad <= cota: 
                 visitados.append(nodo.estado)  
-                sucesores = nodo.estado.sucessor()
-                for sucesor in sucesores:
-                    nodo_añadir = Nodo(sucesor.to_state, 0, nodo.profundidad+1, nodo.costo['distancia'] + sucesor.length, max(nodo.costo['maxDesnivel'], sucesor.heigth), 0, sucesor, nodo.estado)
-                    nodo_añadir.set_valor(estrategia)
-                    frontera.add(nodo_añadir)
+                for sucesor in nodo.estado.sucessor():
+                    id_nodo += 1
+                    nuevo_nodo = Nodo(id_nodo, nodo, sucesor.to_state, nodo.profundidad + 1, nodo.costo_distancia + sucesor.length, max(nodo.costo_max_desnivel, sucesor.heigth), problema.heuristica(sucesor.to_state), sucesor)
+                    nuevo_nodo.valor = estrategia(nuevo_nodo)
+                    frontera.add(nuevo_nodo)
 
 
     camino = []
-    if(solucion):
+    if solucion:
        camino = nodo.funcion_camino()
 
     return camino #si camino está vacío, es que no hay camino

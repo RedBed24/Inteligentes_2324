@@ -1,32 +1,25 @@
-from espacio_estados import Accion,Estado
-from typing import Optional
+from espacio_estados import Accion, Estado
 
 class Nodo:
+    def __init__(self, id : int, parent : "Nodo" | None, estado : Estado, profundidad : int, costo_distancia : float, costo_max_desnivel : float, heuristica : float, accion : Accion | None):
+        self.id = id
+        self.parent = parent
+        self.estado = estado
+        self.valor = None
+        self.profundidad = profundidad
+        self.costo_distancia = costo_distancia
+        self.costo_max_desnivel = costo_max_desnivel
+        self.heuristica = heuristica
+        self.accion = accion
 
-    last_id=0
-
-    def __init__(self, estado:Estado, valor:float, profundidad:int, costo_distancia:float, costo_max_desnivel:float, heuristica:float, accion:Accion,parent:Optional["Nodo"]):
-        self.id=Nodo.last_id
-        Nodo.last_id+=1
-        self.parent=parent
-        self.estado=estado
-        self.valor=valor    
-        self.profundidad=profundidad
-        self.costo = {'distancia': costo_distancia, 'maxDesnivel': costo_max_desnivel}
-        self.heuristica=heuristica
-        self.accion=accion
-
-    def set_valor(self, estrategia:function):
-        self.valor=estrategia(self)
-
-    def __str__(self):
+    def __str__(self) -> str:
         id_parent = self.parent.id if self.parent is not None else None
-        return f"[{self.id}][{self.coste},{self.estado.id},{id_parent},{self.accion},{self.profundidad},{self.heuristica},{self.valor}]"
+        return f"[{self.id}][({self.costo_distancia},{self.costo_max_desnivel}),{self.estado.id},{id_parent},{self.accion.direction},{self.profundidad},{self.heuristica},{self.valor}]"
     
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.__str__()   
     
-    def funcion_camino(self):
+    def funcion_camino(self) -> list:
         camino=[self]
 
         if self.parent is not None:
@@ -34,19 +27,19 @@ class Nodo:
         
         return camino
     
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other : "Nodo") -> bool:
         return (self.valor, self.id) == (other.valor, other.id)
 
-    def __lt__(self, other) -> bool:
+    def __lt__(self, other : "Nodo") -> bool:
         return (self.valor, self.id) < (other.valor, other.id)
 
-    def __le__(self, other) -> bool:
+    def __le__(self, other : "Nodo") -> bool:
         return (self.valor, self.id) <= (other.valor, other.id)
     
-    def __gt__(self, other) -> bool:
+    def __gt__(self, other : "Nodo") -> bool:
         return (self.valor, self.id) > (other.valor, other.id)
 
-    def __ge__(self, other) -> bool:
+    def __ge__(self, other : "Nodo") -> bool:
         return (self.valor, self.id) >= (other.valor, other.id)
 
 
