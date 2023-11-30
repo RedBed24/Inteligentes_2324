@@ -11,4 +11,5 @@ class Problema:
         return state == self.end_state
 
     def heuristica(self, state : Estado) -> float:
-        ...
+        # TODO: heuristica debería de estar aquí???
+        return 0.0
