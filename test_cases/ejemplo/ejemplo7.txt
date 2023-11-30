@@ -1,4 +1,4 @@
-file:GomeraZoom300.hdf5
+file:300_mean.hdf5
 init:(3117601,273733)
 goal:(3107401,287533)
 strategy:UCS
