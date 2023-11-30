@@ -9,7 +9,7 @@ class Accion:
     NORTH = "N"
     SOUTH = "S"
     EAST = "E"
-    WEST = "W"
+    WEST = "O"
     DIRECTIONS = [NORTH, EAST, SOUTH, WEST]
     
     FACTOR = config["factor_desplazamiento"]
