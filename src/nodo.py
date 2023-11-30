@@ -24,7 +24,7 @@ class Nodo:
         camino = [self]
 
         if self.parent is not None:
-            camino += self.parent.funcion_camino()
+            camino = self.parent.funcion_camino() + camino
         
         return camino
     
