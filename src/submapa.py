@@ -27,7 +27,7 @@ class Submapa:
         if p in self:
             col = int((self.sup.y - p.y) / self.sizeCell)
             row = int((p.x - self.inf.x) / self.sizeCell)
-            value = round(self.data()[col][row],3)
+            value = self.data()[col][row]
         return value
 
     def resize(self, factor : int, transform : "function", nombre_nuevo : str) -> "Submapa":
