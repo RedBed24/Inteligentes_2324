@@ -1,9 +1,11 @@
+from __future__ import annotations
+from typing import Callable
 from point import Point
 import numpy as np
 import hdf5_data_handler as hdf5
 
 class Submapa:
-    def __init__(self, filename : str, path : str, inf : "Point", sup : "Point", sizeCell, nodata_Value : float, data = None) -> None:
+    def __init__(self, filename : str, path : str, inf : Point, sup : Point, sizeCell : int, nodata_Value : float, data : np.ndarray | None = None):
         self.inf = inf
         self.sup = sup
         self.sizeCell = sizeCell
@@ -12,16 +14,15 @@ class Submapa:
         self.path = path
         self.__data = data
 
-    def data(self) -> list:
-        # TODO: sólo se carga una vez, cuando se necesita por primera vez
+    def data(self) -> np.ndarray:
         if self.__data is None:
             self.__data = hdf5.leer_dataset_hdf5(self.filename, self.path)
         return self.__data
 
-    def __contains__(self, p : "Point") -> bool:
+    def __contains__(self, p : Point) -> bool:
         return self.inf <= p < self.sup
     
-    def umt_YX(self, p : "Point") -> float:
+    def umt_YX(self, p : Point) -> float:
         value = self.nodata_Value
         if p in self:
             col = int((self.sup.y - p.y) / self.sizeCell)
@@ -53,18 +54,17 @@ class Submapa:
     def __repr__(self) -> str:
         return self.__str__()
 
-    def __gt__(self, other) -> bool:
-        # FIXME: check x too
-        return self.sup.y > other.sup.y
+    def __gt__(self, other : Submapa) -> bool:
+        return (self.sup.y, self.sup.x) > (other.sup.y, other.sup.x)
 
-    def __ge__(self, other) -> bool:
-        return self.sup.y >= other.sup.y
+    def __ge__(self, other : Submapa) -> bool:
+        return (self.sup.y, self.sup.x) >= (other.sup.y, other.sup.x)
 
-    def __lt__(self, other) -> bool:
-        return self.sup.y < other.sup.y
+    def __lt__(self, other : Submapa) -> bool:
+        return (self.sup.y, self.sup.x) < (other.sup.y, other.sup.x)
 
-    def __le__(self, other) -> bool:
-        return self.sup.y <= other.sup.y
+    def __le__(self, other : Submapa) -> bool:
+        return (self.sup.y, self.sup.x) <= (other.sup.y, other.sup.x)
 
-    def __eq__(self, other) -> bool:
-        return self.sup.y == other.sup.y
+    def __eq__(self, other : Submapa) -> bool:
+        return (self.sup.y, self.sup.x) == (other.sup.y, other.sup.x)

@@ -1,4 +1,3 @@
-from espacio_estados import Accion,Estado
 from nodo import Nodo
 from bisect import insort
 
@@ -11,9 +10,9 @@ class Frontera:
         insort(self.frontera, nodo)
 
     # Obtener el tamaño de la frontera
-    def len(self) -> int:
+    def __len__(self) -> int:
         return len(self.frontera)
     
     # Obtener nodo de la frontera
-    def getNode(self)-> Nodo:
-        return self.frontera.pop(0) if self.len() > 0 else None
+    def getNode(self) -> Nodo:
+        return self.frontera.pop(0)
