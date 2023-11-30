@@ -47,7 +47,7 @@ class Accion:
         return self.to_heigth != self.map.nodata_Value and self.heigth_diff <= Accion.ACCION_MAX_HEIGTH
 
     def __str__(self) -> str:
-        return f"({self.direction},{self.to_state},({self.length},{self.heigth_diff}))"
+        return f"('{self.direction}',{self.to_state},({float(self.length)},{round(self.heigth_diff, 3)}))"
     
     def __repr__(self) -> str:
         return self.__str__()
@@ -56,7 +56,7 @@ class Accion:
 class Estado:
     def __init__(self, y : float, x : float, in_map : Mapa):
         self.p = Point(x, y)
-        self.id = f"({self.p.y},{self.p.x})"
+        self.id = f"({int(self.p.y)},{int(self.p.x)})"
         self.map = in_map
     
     def sucessors(self) -> list[Accion]:
