@@ -1,4 +1,4 @@
-file:300_mean.hdf5
+file:GomeraZoom300.hdf5
 init:(3118801,273133)
 goal:(3106201,285733)
 strategy:BFS
