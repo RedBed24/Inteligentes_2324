@@ -1,9 +1,10 @@
 import h5py
+import numpy as np
 
 from submapa import Submapa
 from point import Point
 
-def leer_hdf5(filename : str) -> tuple:
+def leer_hdf5(filename : str) -> tuple[h5py.File, list[Submapa]]:
     maps = []
 
     with h5py.File(filename, "r") as f:
@@ -19,7 +20,7 @@ def leer_hdf5(filename : str) -> tuple:
 
     return f, maps
 
-def create_hdf5(filename : str, new_submaps : list) -> None:
+def create_hdf5(filename : str, new_submaps : list[Submapa]) -> None:
     with h5py.File(filename, "w") as f:
         for new_submap in new_submaps:
             dataset = f.create_dataset(new_submap.path, data = new_submap.data())
@@ -30,7 +31,7 @@ def create_hdf5(filename : str, new_submaps : list) -> None:
             dataset.attrs["cellsize"] = new_submap.sizeCell
             dataset.attrs["nodata_value"] = new_submap.nodata_Value
 
-def leer_dataset_hdf5(filename : str, dataset_name : str) -> list:
+def leer_dataset_hdf5(filename : str, dataset_name : str) -> np.ndarray:
     data = None
     with h5py.File(filename, "r") as f:
         data = f[dataset_name][()]

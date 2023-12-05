@@ -1,8 +1,11 @@
+from __future__ import annotations
+from typing import Callable
+import numpy as np
 import hdf5_data_handler as hdf5
 from point import Point
 
 class Mapa:
-    def __init__(self, filename : str) -> None:
+    def __init__(self, filename : str):
         self.filename = filename
         self.f, self.submaps = hdf5.leer_hdf5(self.filename)
 
@@ -15,7 +18,7 @@ class Mapa:
 
         self.dim = [(self.downRight.x - self.upLeft.x) / self.sizeCell, (self.upLeft.y - self.downRight.y) / self.sizeCell]
 
-    def __calc_corners(self) -> tuple:
+    def __calc_corners(self) -> tuple[Point, Point]:
         lowest = Point(self.submaps[0].inf.x, self.submaps[0].inf.y)
         highest = Point(self.submaps[0].sup.x, self.submaps[0].sup.y)
 
@@ -38,7 +41,7 @@ class Mapa:
         """Dadas las coordenadas Y-UMT y X-UMT debe devolver el valor correspondiente a la celda del grid que corresponda a la posición de dichas coordenadas. Si no existe valor en dichas coordenadas devolverá el valor Mapa.nodata_Value."""
         return self.umt_Point(Point(x, y))
 
-    def umt_Point(self, p : "Point") -> float:
+    def umt_Point(self, p : Point) -> float:
         """Dadas las coordenadas Y-UMT y X-UMT debe devolver el valor correspondiente a la celda del grid que corresponda a la posición de dichas coordenadas. Si no existe valor en dichas coordenadas devolverá el valor Mapa.nodata_Value."""
         if p in self:
             for submap in self.submaps:
@@ -46,7 +49,7 @@ class Mapa:
                     return submap.umt_YX(p)
         return self.nodata_Value
 
-    def resize(self, factor : int, transform : "function", nombre_nuevo : str) -> "Mapa":
+    def resize(self, factor : int, transform : Callable[[np.ndarray], float], nombre_nuevo : str) -> Mapa:
         new_submaps = []
         for submap in self.submaps:
             new_submaps.append(submap.resize(factor, transform, nombre_nuevo))
@@ -61,5 +64,5 @@ class Mapa:
     def __repr__(self) -> str:
         return self.__str__()
 
-    def __contains__(self, p : "Point") -> bool:
+    def __contains__(self, p : Point) -> bool:
         return Point(self.upLeft.x, self.downRight.y) <= p < Point(self.downRight.x, self.upLeft.y)

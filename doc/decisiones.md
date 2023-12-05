@@ -53,6 +53,21 @@ La implementación de esta es fácil:
 3. Problema
    - Guarda el mapa, el estado inicial y los datos para calcular la función objetivo.
 
+Hay que destacar que tanto la clase 'Estado' como la clase 'Accion', han sido definidas en el mismo archivo ('espacio_estados.py'), ya que, si separabamos las clases en un archivo cada una, sufriamos un problema de importación circular. La causa de esto es que la clase 'Estado' maneja instancias de la clase 'Accion' y viceversa.
+
 # Archivo de configuración
 
 Hemos decidido utilizar un archivo de configuración *.json* con el objetivo de separar los datos del código. De esta forma, se facilita la modificación de las constantes con las que se van a trabajar sin necesidad de modificar el código fuente.
+
+# Tarea 3
+
+Se han implementado diferentes clases:
+
+1. Nodo
+   - Contiene un id que se incrementa automaticamente en una unidad, el valor, la profundidad, el costo, la heuristica, el estado, la accion y el nodo padre.
+   - Se guarda una referencia al nodo padre con el objetivo de después poder construir el camino desde el nodo raiz hasta un nodo determinado.
+   - Es mayor a otro nodo si el atributo valor también lo es. En caso de empate, será mayor el nodo con mayor id.
+   
+2. Frontera
+   - Contiene todos los nodos que previamente han sido insertados de forma ordenada.
+   - Tiene métodos para obtener el tamaño y para sacar nodos.

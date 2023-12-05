@@ -1,6 +1,6 @@
 {
-    "datafolder": "data",
+    "data_folder": "data",
     "mapa_hdf5": "LaGomera.hdf5",
-    "factor_desplazamiento": 5,
+    "factor_desplazamiento": 1,
     "accion_max_height": 100
 }
