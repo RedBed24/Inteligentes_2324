@@ -6,7 +6,7 @@ import os.path
 
 def Create_From_String(string : str, in_map : Mapa) -> Estado:
         y, x = string[1:-1].split(',')
-        return Estado(float(y), float(x), in_map)
+        return Estado(int(y), int(x), in_map)
 
 def test_2(map, filename) -> None:
     with open(filename, "r") as f:
