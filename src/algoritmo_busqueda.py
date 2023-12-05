@@ -3,13 +3,14 @@ from nodo import Nodo
 from frontera import Frontera
 from problema import Problema
 
-def algoritmo_busqueda(problema : Problema, estrategia : Callable[[Nodo], float], profundidad_maxima : int) -> list[Nodo]:
+def algoritmo_busqueda(problema : Problema, estrategia : Callable[[Nodo], float], heuristica : Callable[[Nodo, Problema], float], profundidad_maxima : int) -> list[Nodo]:
     id_nodo = 0
     frontera = Frontera()
     visitados = []
     solucion = False
-    nodo = Nodo(id_nodo, None, problema.initial_state, 0, 0, 0, problema.heuristica(problema.initial_state), None)
+    nodo = Nodo(id_nodo, None, problema.initial_state, 0, 0, 0, 0, None)
     nodo.valor = estrategia(nodo)
+    nodo.heuristica = heuristica(nodo, problema)
     frontera.add(nodo)
 
     while len(frontera) and not solucion:
@@ -20,8 +21,9 @@ def algoritmo_busqueda(problema : Problema, estrategia : Callable[[Nodo], float]
             visitados.append(nodo.estado)  
             for sucesor in nodo.estado.sucessors():
                 id_nodo += 1
-                nuevo_nodo = Nodo(id_nodo, nodo, sucesor.to_state, nodo.profundidad + 1, nodo.costo_distancia + sucesor.length, max(nodo.costo_max_desnivel, sucesor.heigth_diff), problema.heuristica(sucesor.to_state), sucesor)
+                nuevo_nodo = Nodo(id_nodo, nodo, sucesor.to_state, nodo.profundidad + 1, nodo.costo_distancia + sucesor.length, max(nodo.costo_max_desnivel, sucesor.heigth_diff), 0, sucesor)
                 nuevo_nodo.valor = estrategia(nuevo_nodo)
+                nuevo_nodo.heuristica = heuristica(nuevo_nodo, problema)
                 frontera.add(nuevo_nodo)
 
     camino = []

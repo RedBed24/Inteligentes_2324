@@ -2,8 +2,8 @@ import os.path
 import json
 
 import estrategias
+import heuristicas
 from mapa import Mapa
-from espacio_estados import Accion
 from problema import Problema
 from algoritmo_busqueda import algoritmo_busqueda
 
@@ -13,6 +13,8 @@ ALGORITMOS = {
     "BFS": estrategias.BFS,
     "DFS": estrategias.DFS,
     "UCS": estrategias.UCS,
+    "GREEDY": estrategias.GREEDY,
+    "A*": estrategias.ASTAR,
 }
 
 def test_algoritmo(path, maps_dir):
@@ -27,7 +29,13 @@ def test_algoritmo(path, maps_dir):
 
         problema = Problema(file, init.p.y, init.p.x, goal.p.y, goal.p.x)
 
-        resultado = algoritmo_busqueda(problema, strategy, profundidad_maxima)
+        heuristica = lambda x, y: 0.0
+        if "euclidea" in file:
+            heuristica = heuristicas.euclidean
+        elif "manhattan" in file:
+            heuristica = heuristicas.euclidean
+
+        resultado = algoritmo_busqueda(problema, strategy, heuristica, profundidad_maxima)
         for res in resultado:
             print(res)
 

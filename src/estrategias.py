@@ -8,3 +8,9 @@ def DFS(nodo : Nodo) -> float:
 
 def UCS(nodo : Nodo) -> float:
     return nodo.costo_distancia
+
+def GREEDY(nodo : Nodo) -> float:
+    return nodo.heuristica
+
+def ASTAR(nodo : Nodo) -> float:
+    return nodo.costo_distancia + nodo.heuristica
