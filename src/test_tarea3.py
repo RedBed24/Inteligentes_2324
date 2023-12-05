@@ -30,10 +30,10 @@ def test_algoritmo(path, maps_dir):
         problema = Problema(file, init.p.y, init.p.x, goal.p.y, goal.p.x)
 
         heuristica = lambda x, y: 0.0
-        if "euclidea" in file:
+        if "euclidea" in path:
             heuristica = heuristicas.euclidean
-        elif "manhattan" in file:
-            heuristica = heuristicas.euclidean
+        elif "manhattan" in path:
+            heuristica = heuristicas.manhattan
 
         resultado = algoritmo_busqueda(problema, strategy, heuristica, profundidad_maxima)
         for res in resultado:
