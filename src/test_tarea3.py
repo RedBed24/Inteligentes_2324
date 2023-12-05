@@ -36,13 +36,11 @@ def test_algoritmo(path, maps_dir):
             heuristica = heuristicas.manhattan
 
         resultado = algoritmo_busqueda(problema, strategy, heuristica, profundidad_maxima)
-        for res in resultado:
-            print(res)
 
-        #for line_num in range(len(lines)):
-        #    if lines[line_num][:-1] != str(resultado[line_num]):
-        #        print(f"{path}:{line_num + 6}: {resultado[line_num]}")
-        #    #assert lines[line_num][:-1] == str(resultado[line_num])
+        for i in range(len(resultado)):
+            if lines[i][:-1] != str(resultado[i]):
+                print(f"{path}:{i + 6}: {resultado[i]}")
+
     print(f"test {path} passed")
 
 def main():
@@ -52,7 +50,11 @@ def main():
     for os_file in os.listdir(dir):
         if os_file.endswith(".txt"):
             test_algoritmo(os.path.join(dir, os_file), config["data_folder"])
-            break
+
+    dir = os.path.join("test_cases", "test_heuristica")
+    for os_file in os.listdir(dir):
+        if os_file.endswith(".txt"):
+            test_algoritmo(os.path.join(dir, os_file), config["data_folder"])
 
 if __name__ == "__main__":
     main()
