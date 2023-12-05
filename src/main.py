@@ -7,7 +7,7 @@ import json
 def set_up_maps(map, config):
     factor = 300
     transform = np.mean
-    map_name = "300_mean.hdf5"
+    map_name = "GomeraZoom300.hdf5"
 
     map.resize(factor, transform, os.path.join(config["data_folder"], map_name))
 

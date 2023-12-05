@@ -27,7 +27,7 @@ def main():
     with open('config.json', 'r') as file: config = json.load(file)
 
     test_umt(Mapa(os.path.join(config["data_folder"], config["mapa_hdf5"])), os.path.join("test_cases", "test_map_original.txt"))
-    test_umt(Mapa(os.path.join(config["data_folder"], "300_mean.hdf5")), os.path.join("test_cases", "test_map_300_mean.txt"))
+    test_umt(Mapa(os.path.join(config["data_folder"], "GomeraZoom300.hdf5")), os.path.join("test_cases", "test_map_300_mean.txt"))
     test_umt(Mapa(os.path.join(config["data_folder"], "400_max.hdf5")), os.path.join("test_cases", "test_map_400_max.txt"))
 
 
