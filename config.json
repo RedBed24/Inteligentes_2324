@@ -1,6 +1,8 @@
 {
     "data_folder": "data",
     "mapa_hdf5": "LaGomera.hdf5",
+    "mapa_hdf5_300": "300_mean.hdf5",
+    "mapa_hdf5_400": "400_max.hdf5",
     "factor_desplazamiento": 1,
-    "accion_max_height": 100
+    "accion_max_height": 10000
 }
