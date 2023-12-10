@@ -1,9 +1,10 @@
 import os.path
 import json
 
-import estrategias
-from mapa import Mapa
 from espacio_estados import Accion
+import estrategias
+import heuristicas
+from mapa import Mapa
 from problema import Problema
 from algoritmo_busqueda import algoritmo_busqueda
 
@@ -13,6 +14,8 @@ ALGORITMOS = {
     "BFS": estrategias.BFS,
     "DFS": estrategias.DFS,
     "UCS": estrategias.UCS,
+    "GREEDY": estrategias.GREEDY,
+    "A*": estrategias.ASTAR,
 }
 
 def test_algoritmo(path, maps_dir):
@@ -27,24 +30,29 @@ def test_algoritmo(path, maps_dir):
 
         problema = Problema(file, init.p.y, init.p.x, goal.p.y, goal.p.x)
 
-        resultado = algoritmo_busqueda(problema, strategy, profundidad_maxima)
-        for res in resultado:
-            print(res)
+        heuristica = lambda x, y: 0.0
+        if "euclidea" in path:
+            heuristica = heuristicas.euclidean
+        elif "manhattan" in path:
+            heuristica = heuristicas.manhattan
 
-        #for line_num in range(len(lines)):
-        #    if lines[line_num][:-1] != str(resultado[line_num]):
-        #        print(f"{path}:{line_num + 6}: {resultado[line_num]}")
-        #    #assert lines[line_num][:-1] == str(resultado[line_num])
+        resultado = algoritmo_busqueda(problema, strategy, heuristica, profundidad_maxima)
+
+        for i in range(len(resultado)):
+            assert lines[i][:-1] == str(resultado[i])
+
     print(f"test {path} passed")
 
 def main():
     with open('config.json', 'r') as file: config = json.load(file)
 
-    dir = os.path.join("test_cases", "ejemplo")
-    for os_file in os.listdir(dir):
-        if os_file.endswith(".txt"):
-            test_algoritmo(os.path.join(dir, os_file), config["data_folder"])
-            break
+    Accion.ACCION_MAX_HEIGTH = 100
+
+    for tarea in ["T3", "T4"]:
+        dir = os.path.join(config["test_folders"]["base"], config["test_folders"][tarea])
+        for os_file in os.listdir(dir):
+            if os_file.endswith(".txt"):
+                test_algoritmo(os.path.join(dir, os_file), config["data_folder"])
 
 if __name__ == "__main__":
     main()

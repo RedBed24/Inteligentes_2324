@@ -26,9 +26,9 @@ def test_umt(mapa : Mapa, filename : str, roundval : int = 3) -> None:
 def main():
     with open('config.json', 'r') as file: config = json.load(file)
 
-    test_umt(Mapa(os.path.join(config["data_folder"], config["mapa_hdf5"])), os.path.join("test_cases", "test_map_original.txt"))
-    test_umt(Mapa(os.path.join(config["data_folder"], "300_mean.hdf5")), os.path.join("test_cases", "test_map_300_mean.txt"))
-    test_umt(Mapa(os.path.join(config["data_folder"], "400_max.hdf5")), os.path.join("test_cases", "test_map_400_max.txt"))
+    test_umt(Mapa(os.path.join(config["data_folder"], config["maps_names"]["original"])), os.path.join(config["test_folders"]["base"], config["test_folders"]["T1"], "test_map_original.txt"))
+    test_umt(Mapa(os.path.join(config["data_folder"], config["maps_names"]["300_mean"])),  os.path.join(config["test_folders"]["base"], config["test_folders"]["T1"], "test_map_300_mean.txt"))
+    test_umt(Mapa(os.path.join(config["data_folder"], config["maps_names"]["400_max"])),  os.path.join(config["test_folders"]["base"], config["test_folders"]["T1"], "test_map_400_max.txt"))
 
 
 if __name__ == "__main__":

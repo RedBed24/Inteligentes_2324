@@ -1,26 +1,13 @@
-from mapa import Mapa
-
-import numpy as np
-import os.path
-import json
-
-def set_up_maps(map, config):
-    factor = 300
-    transform = np.mean
-    map_name = "300_mean.hdf5"
-
-    map.resize(factor, transform, os.path.join(config["data_folder"], map_name))
-
-    factor = 400
-    transform = np.max
-    map_name = "400_max.hdf5"
-
-    map.resize(factor, transform, os.path.join(config["data_folder"], map_name))
+import setup
+import test_tarea1
+import test_tarea2
+import test_tarea3
 
 def main():
-    with open('config.json', 'r') as file: config = json.load(file)
-
-    set_up_maps(Mapa(os.path.join(config["data_folder"], config["mapa_hdf5"])), config)
+    setup.main() # create all maps
+    test_tarea1.main()
+    test_tarea2.main()
+    test_tarea3.main()
 
 if __name__ == "__main__":
     main()
