@@ -1,6 +1,7 @@
 import os.path
 import json
 
+from espacio_estados import Accion
 import estrategias
 import heuristicas
 from mapa import Mapa
@@ -18,7 +19,6 @@ ALGORITMOS = {
 }
 
 def test_algoritmo(path, maps_dir):
-    print(f"testing {path}")
     with open(path, "r") as f:
         lines = f.readlines()
 
@@ -39,14 +39,14 @@ def test_algoritmo(path, maps_dir):
         resultado = algoritmo_busqueda(problema, strategy, heuristica, profundidad_maxima)
 
         for i in range(len(resultado)):
-            print(f"{path}:{i + 6}: {resultado[i]}")
-            if lines[i][:-1] != str(resultado[i]):
-                ...
+            assert lines[i][:-1] == str(resultado[i])
 
     print(f"test {path} passed")
 
 def main():
     with open('config.json', 'r') as file: config = json.load(file)
+
+    Accion.ACCION_MAX_HEIGTH = 100
 
     for tarea in ["T3", "T4"]:
         dir = os.path.join(config["test_folders"]["base"], config["test_folders"][tarea])
