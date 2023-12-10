@@ -8,13 +8,13 @@ def Create_From_String(string : str, in_map : Mapa) -> Estado:
         y, x = string[1:-1].split(',')
         return Estado(int(y), int(x), in_map)
 
-def test_2(map, filename) -> None:
+def test_2(mapa, filename) -> None:
     with open(filename, "r") as f:
         lines = f.readlines()
         for line_num in range(len(lines)):
             divisiones = lines[line_num][:-1].split("\t")
-            estado = Create_From_String(divisiones.pop(0), map)
-            succ = map(str, estado.sucessors())
+            estado = Create_From_String(divisiones.pop(0), mapa)
+            succ = [str(a) for a in estado.sucessors()]
 
             if succ != divisiones:
                 print(f"{filename}:{line_num + 1}: {succ}")
@@ -25,8 +25,8 @@ def test_2(map, filename) -> None:
 def main():
     with open('config.json', 'r') as file: config = json.load(file)
 
-    test_2(Mapa(os.path.join(config["data_folder"], "400_max.hdf5")), os.path.join("test_cases", "sucesores_400_max.txt"))
-    test_2(Mapa(os.path.join(config["data_folder"], "GomeraZoom300.hdf5")), os.path.join("test_cases", "sucesores_300_mean.txt"))
+    test_2(Mapa(os.path.join(config["data_folder"], config["maps_names"]["400_max"])), os.path.join(config["test_folders"]["base"], config["test_folders"]["T2"], "sucesores_400_max.txt"))
+    test_2(Mapa(os.path.join(config["data_folder"], config["maps_names"]["300_mean"])), os.path.join(config["test_folders"]["base"], config["test_folders"]["T2"], "sucesores_300_mean.txt"))
 
 if __name__ == "__main__":
     main()
