@@ -10,7 +10,9 @@ class Accion:
     SOUTH = "S"
     EAST = "E"
     WEST = "O"
-    DIRECTIONS = [NORTH, EAST, SOUTH, WEST]
+    NORTH_WEST= "NO"
+    SOUTH_EAST = "SE"
+    DIRECTIONS = [NORTH, EAST, SOUTH_EAST,SOUTH, WEST,NORTH_WEST]
     
     FACTOR = config["factor_desplazamiento"]
     ACCION_MAX_HEIGTH = config["accion_max_height"]
@@ -27,6 +29,10 @@ class Accion:
                 to_state = Estado(from_state.p.y, from_state.p.x + length, map)
             case Accion.WEST:
                 to_state = Estado(from_state.p.y, from_state.p.x - length, map)
+            case Accion.NORTH_WEST:
+                to_state= Estado(from_state.p.y + length, from_state.p.x - length, map)
+            case Accion.SOUTH_EAST:
+                to_state = Estado(from_state.p.y - length, from_state.p.x + length, map)
             case _:
                 raise Exception(f"Invalid {direction = }")
         return to_state
