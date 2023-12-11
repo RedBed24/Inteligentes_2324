@@ -13,5 +13,5 @@
         "T4": "test_heuristica"
     },
     "factor_desplazamiento": 1,
-    "accion_max_height": 10000
+    "accion_max_height": 457
 }
