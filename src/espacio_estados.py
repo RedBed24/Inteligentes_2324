@@ -2,6 +2,7 @@ from __future__ import annotations
 import json
 from mapa import Mapa
 from point import Point
+from math import sqrt
 
 with open('config.json', 'r') as file:     config = json.load(file)
 
@@ -10,8 +11,10 @@ class Accion:
     SOUTH = "S"
     EAST = "E"
     WEST = "O"
+    NORTH_WEST = "NO"
     NORTH_EAST = "NE"
     SOUTH_WEST = "SO"
+    SOUTH_EAST = "SE"
     DIRECTIONS = [NORTH, NORTH_EAST, EAST, SOUTH, SOUTH_WEST, WEST, NORTH]
     
     FACTOR = config["factor_desplazamiento"]
@@ -29,11 +32,14 @@ class Accion:
                 to_state = Estado(from_state.p.y, from_state.p.x + length, map)
             case Accion.WEST:
                 to_state = Estado(from_state.p.y, from_state.p.x - length, map)
-            # Maybe it should be length * sqrt(2) instead of length, but i dont know
+            case Accion.NORTH_WEST:
+                to_state = Estado(from_state.p.y + length, from_state.p.x - length, map)
             case Accion.NORTH_EAST:
                 to_state = Estado(from_state.p.y + length, from_state.p.x + length, map)
             case Accion.SOUTH_WEST:
                 to_state = Estado(from_state.p.y - length, from_state.p.x - length, map)
+            case Accion.SOUTH_EAST:
+                to_state = Estado(from_state.p.y - length, from_state.p.x + length, map)
             case _:
                 raise Exception(f"Invalid {direction = }")
         return to_state
@@ -48,7 +54,9 @@ class Accion:
 
         self.to_heigth = self.map.umt_Point(self.to_state.p)
         self.heigth_diff = abs(self.to_heigth - self.map.umt_Point(from_state.p))
-        
+
+        self.length = sqrt((self.to_state.p.x - from_state.p.x) ** 2 + (self.to_state.p.y - from_state.p.y) ** 2)
+
 
     def valid(self) -> bool:
         return self.to_heigth != self.map.nodata_Value and self.heigth_diff <= Accion.ACCION_MAX_HEIGTH
