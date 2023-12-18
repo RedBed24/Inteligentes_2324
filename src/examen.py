@@ -15,7 +15,8 @@ def main():
 
     factor = 280
     transform = max
-    map_name = os.path.join(config["data_folder"], "Gomerazoom280.hdf5")
+    nombre = "Gomerazoom280.hdf5"
+    map_name = os.path.join(config["data_folder"], nombre)
 
     mp = Mapa(os.path.join(config["data_folder"], config["maps_names"]["original"]))
     # Only need the file in disk, because Problema takes a path, not a Mapa
@@ -37,7 +38,7 @@ def main():
     )
 
     with open(os.path.join("resultados", "solution.txt"), "w") as f:
-        f.write(f"file:ejercicio1\n")
+        f.write(f"file:{nombre}\n")
         f.write(f"init:({y0}, {x0})\n")
         f.write(f"goal:({yf}, {xf})\n")
         f.write(f"strategy:BFS\n")
