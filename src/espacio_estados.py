@@ -7,15 +7,15 @@ from math import sqrt
 with open('config.json', 'r') as file:     config = json.load(file)
 
 class Accion:
-    NORTH = "N"
-    SOUTH = "S"
-    EAST = "E"
-    WEST = "O"
-    NORTH_WEST = "NO"
-    NORTH_EAST = "NE"
-    SOUTH_WEST = "SO"
-    SOUTH_EAST = "SE"
-    DIRECTIONS = [NORTH, NORTH_EAST, EAST, SOUTH, SOUTH_WEST, WEST, NORTH]
+    N = NORTH = "N"
+    S = SOUTH = "S"
+    E = EAST = "E"
+    O = WEST = "O"
+    NO = NORTH_WEST = "NO"
+    NE = NORTH_EAST = "NE"
+    SO = SOUTH_WEST = "SO"
+    SE = SOUTH_EAST = "SE"
+    DIRECTIONS = [N,NE,E,SE,S,SO,O,NO]
     
     FACTOR = config["factor_desplazamiento"]
     ACCION_MAX_HEIGTH = config["accion_max_height"]

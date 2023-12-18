@@ -25,8 +25,9 @@ def algoritmo_busqueda(problema : Problema, estrategia : Callable[[Nodo], float]
                 nuevo_nodo.heuristica = heuristica(nuevo_nodo, problema)
                 nuevo_nodo.valor = estrategia(nuevo_nodo)
                 frontera.add(nuevo_nodo)
-                if nuevo_nodo.id == 4683:
-                    print(nuevo_nodo.parent.parent.id)
+                if str(nuevo_nodo.estado) == "(3106601,275213)":
+                    print("Nodo:", nuevo_nodo.id)
+
 
     camino = []
     if solucion:

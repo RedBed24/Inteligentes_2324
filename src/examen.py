@@ -13,30 +13,30 @@ def main():
     with open('config.json', 'r') as file: config = json.load(file)
     os.makedirs("resultados", exist_ok=True)
 
-    factor = 250
-    transform = np.mean
-    map_name = os.path.join(config["data_folder"], "Gomerazoom250.hdf5")
+    factor = 280
+    transform = max
+    map_name = os.path.join(config["data_folder"], "Gomerazoom280.hdf5")
 
     mp = Mapa(os.path.join(config["data_folder"], config["maps_names"]["original"]))
     # Only need the file in disk, because Problema takes a path, not a Mapa
     _ = mp.resize(factor, transform, map_name)
 
-    y0, x0 = (3118001, 271333)
-    yf, xf = (3107001, 288833)
+    y0, x0 = (3105481, 274093)
+    yf, xf = (3120601, 284733)
 
-    Accion.ACCION_MAX_HEIGTH = 454
+    Accion.ACCION_MAX_HEIGTH = 595
     Accion.FACTOR = 1
 
-    maxdepth = 100000
+    maxdepth = 81
 
     resultado = algoritmo_busqueda(
         Problema(map_name, y0, x0, yf, xf),
-        estrategias.ASTAR,
-        heuristicas.euclidean,
+        estrategias.GREEDY,
+        heuristicas.manhattan,
         maxdepth # prfundidad maxima
     )
 
-    with open(os.path.join("resultados", "ejercicio1.txt"), "w") as f:
+    with open(os.path.join("resultados", "solution.txt"), "w") as f:
         f.write(f"file:ejercicio1\n")
         f.write(f"init:({y0}, {x0})\n")
         f.write(f"goal:({yf}, {xf})\n")
