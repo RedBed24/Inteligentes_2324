@@ -17,7 +17,7 @@ def algoritmo_busqueda(problema : Problema, estrategia : Callable[[Nodo], float]
         nodo = frontera.getNode()
         if problema.objetivo(nodo.estado):
             solucion = True
-        elif nodo.estado not in visitados and nodo.profundidad <= profundidad_maxima:
+        elif nodo.estado not in visitados and nodo.profundidad < profundidad_maxima:
             visitados.append(nodo.estado)  
             for sucesor in nodo.estado.sucessors():
                 id_nodo += 1
