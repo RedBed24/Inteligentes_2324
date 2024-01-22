@@ -53,6 +53,8 @@ def algoritmo_busqueda(problema : Problema, estrategia : Callable[[Nodo], float]
 
     camino = []
     if solucion:
-       camino = nodo.funcion_camino()
+        # imprime id, profundidad y valor del ultimo nodo
+        print(nodo)
+        camino = nodo.funcion_camino()
 
     return camino #si camino está vacío, es que no hay camino
