@@ -16,7 +16,7 @@ class Nodo:
     def __str__(self) -> str:
         id_parent = self.parent.id if self.parent is not None else None
         direction = self.accion.direction if self.accion is not None else None
-        return f"[{self.id}][({round(self.costo_distancia, 3):.3f},{round(self.costo_max_desnivel, 3):.3f}),{self.estado.id},{id_parent},{direction},{self.profundidad},{self.heuristica},{round(self.valor, 4):.4f}]"
+        return f"[{self.id}][({round(self.costo_distancia, 3):.3f},{round(self.costo_max_desnivel, 3):.3f}),{self.estado.id},{id_parent},{direction},{self.profundidad},{self.heuristica},{round(self.valor, 3):.3f}]"
     
     def __repr__(self) -> str:
         return self.__str__()   
